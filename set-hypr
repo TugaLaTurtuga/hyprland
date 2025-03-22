@@ -16,10 +16,9 @@ if command -v yay >/dev/null 2>&1; then
 else
     echo -e "yay was not located. Installing yay...\n"
     
-    git clone https://aur.archlinux.org/yay.git
-    sudo 
+    sudo git clone https://aur.archlinux.org/yay.git
 
-    echo -e "$CER yay needs to be pkg. do:\n _cd\n _chown -R USERNAME:USERNAME yay\n _cd yay\n _makepkg -si"
+    echo -e "$CER yay needs to be pkg. do:\n 1º: cd\n 2º: chown -R USERNAME:USERNAME yay\n 3º: cd yay\n 4º: makepkg -si"
 fi
 
 # Update system and install essential dependencies
