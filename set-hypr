@@ -70,18 +70,6 @@ fi
 
 clear
 
-# Option to disable WiFi power-saving mode
-read -n1 -rep 'Would you like to disable WiFi power save? (y/n) ' WIFI
-if [[ $WIFI == "Y" || $WIFI == "y" ]]; then
-    sudo tee /etc/NetworkManager/conf.d/wifi-powersave.conf > /dev/null <<EOF
-[connection]
-wifi.powersave = 2
-EOF
-    sudo systemctl restart NetworkManager
-fi
-
-clear
-
 # Option to install Hyprland and additional utilities
 read -n1 -rep 'Would you like to install the required packages? (y/n) ' INST
 if [[ $INST == "Y" || $INST == "y" ]]; then
