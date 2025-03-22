@@ -9,25 +9,22 @@ CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 INSTLOG="install.log"  # Log file for package installations
 
-# Function to install software packages using yay
-install_software() {
-    # Check if the package is already installed
+# Check if the package is already installed
+if yay -Q $1 &>> /dev/null ; then
+    echo -e "$COK - $1 is already installed."
+else
+    # If not installed, attempt installation
+    echo -en "$CNT - Now installing $1 ."
+    yay -S --noconfirm $1 &>> $INSTLOG &
+    show_progress $!
+    # Verify if installation was successful
     if yay -Q $1 &>> /dev/null ; then
-        echo -e "$COK - $1 is already installed."
+        echo -e "\e[1A\e[K$COK - $1 was installed."
     else
-        # If not installed, attempt installation
-        echo -en "$CNT - Now installing $1 ."
-        yay -S --noconfirm $1 &>> $INSTLOG &
-        show_progress $!
-        # Verify if installation was successful
-        if yay -Q $1 &>> /dev/null ; then
-            echo -e "\e[1A\e[K$COK - $1 was installed."
-        else
-            echo -e "\e[1A\e[K$CER - $1 install failed, please check the install.log"
-            exit
-        fi
+        echo -e "\e[1A\e[K$CER - $1 install failed, please check the install.log"
+        exit
     fi
-}
+fi
 
 clear
 
