@@ -14,7 +14,7 @@ else
 fi
 
 # Install base dependencies
-sudo pacman -Syu sddm sddm-kcm layer-shell-qt5 qt5-declarative neofetch libva xorg-xinit xorg-server mesa
+sudo pacman -Syu sddm sddm-kcm layer-shell-qt5 qt5-declarative neofetch libva xorg-xinit xorg-server mesa pulseaudio nano flatpak
 
 # Install SDDM theme
 git clone https://github.com/HyDE-Project/sddm-hyprland
