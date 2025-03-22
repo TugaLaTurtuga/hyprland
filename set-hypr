@@ -73,7 +73,7 @@ clear
 # Option to install Hyprland and additional utilities
 read -n1 -rep 'Would you like to install the required packages? (y/n) ' INST
 if [[ $INST == "Y" || $INST == "y" ]]; then
-    yay -S --noconfirm hyprland kitty waybar \
+    yay -S hyprland kitty waybar \
         swaybg swaylock-effects wofi wlogout mako thunar \
         ttf-jetbrains-mono-nerd noto-fonts-emoji \
         polkit-gnome python-requests starship \
@@ -84,9 +84,6 @@ if [[ $INST == "Y" || $INST == "y" ]]; then
 
     # Enable Bluetooth services
     sudo systemctl enable --now bluetooth.service
-
-    # Remove unnecessary portals
-    yay -R --noconfirm xdg-desktop-portal-gnome xdg-desktop-portal-gtk
 fi
 
 clear
