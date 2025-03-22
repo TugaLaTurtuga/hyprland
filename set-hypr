@@ -17,9 +17,9 @@ else
     echo -e "yay was not located. Installing yay...\n"
     
     git clone https://aur.archlinux.org/yay.git
-    sudo chown -R $(whoami):$(whoami) yay
-    (cd yay && makepkg -si)
-    yay -Suy
+    sudo 
+
+    echo -e "$CER yay needs to be pkg. do:\n _cd\n _chown -R USERNAME:USERNAME yay\n _cd yay\n _makepkg -si"
 fi
 
 # Update system and install essential dependencies
