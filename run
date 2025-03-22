@@ -19,6 +19,7 @@ else
     sudo git clone https://aur.archlinux.org/yay.git
 
     echo -e "$CER yay needs to be pkg. do:\n 1º: cd\n 2º: chown -R USERNAME:USERNAME yay\n 3º: cd yay\n 4º: makepkg -si"
+    exit
 fi
 
 # Update system and install essential dependencies
