@@ -9,24 +9,18 @@ CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 INSTLOG="install.log"  # Log file for package installations
 
-# Check if the package is already installed
-if yay -Q $1 &>> /dev/null ; then
-    echo -e "$COK - $1 is already installed."
+# Check if yay is already installed
+if command -v yay >/dev/null 2>&1; then
+    echo -e "yay was located, moving on.\n"
+    yay -Suy
 else
-    # If not installed, attempt installation
-    echo -en "$CNT - Now installing $1 ."
-    yay -S --noconfirm $1 &>> $INSTLOG &
-    show_progress $!
-    # Verify if installation was successful
-    if yay -Q $1 &>> /dev/null ; then
-        echo -e "\e[1A\e[K$COK - $1 was installed."
-    else
-        echo -e "\e[1A\e[K$CER - $1 install failed, please check the install.log"
-        exit
-    fi
+    echo -e "yay was not located. Installing yay...\n"
+    
+    git clone https://aur.archlinux.org/yay.git
+    sudo chown -R $(whoami):$(whoami) yay
+    (cd yay && makepkg -si)
+    yay -Suy
 fi
-
-clear
 
 # Update system and install essential dependencies
 sudo pacman -Syu sddm sddm-kcm layer-shell-qt5 qt5-declarative \
