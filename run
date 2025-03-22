@@ -1,0 +1,112 @@
+#!/bin/bash
+
+# Define color-coded messages for output formatting
+CNT="[\e[1;36mNOTE\e[0m]"
+COK="[\e[1;32mOK\e[0m]"
+CER="[\e[1;31mERROR\e[0m]"
+CAT="[\e[1;37mATTENTION\e[0m]"
+CWR="[\e[1;35mWARNING\e[0m]"
+CAC="[\e[1;33mACTION\e[0m]"
+INSTLOG="install.log"  # Log file for package installations
+
+# Check if yay is already installed
+if command -v yay >/dev/null 2>&1; then
+    echo -e "yay was located, moving on.\n"
+    yay -Suy
+else
+    echo -e "yay was not located. Installing yay...\n"
+    
+    sudo git clone https://aur.archlinux.org/yay.git
+
+    echo -e "$CER yay needs to be pkg. do:\n 1º: cd\n 2º: chown -R USERNAME:USERNAME yay\n 3º: cd yay\n 4º: makepkg -si"
+fi
+
+# Update system and install essential dependencies
+sudo pacman -Syu sddm sddm-kcm layer-shell-qt5 qt5-declarative \
+    neofetch libva xorg-xinit xorg-server mesa pulseaudio nano flatpak
+
+clear
+
+# Clone and install the SDDM Hyprland theme
+git clone https://github.com/HyDE-Project/sddm-hyprland
+sudo make -C sddm-hyprland install
+
+clear
+
+# Ask user to specify CPU brand and install the appropriate microcode
+read -n1 -rep 'What is your CPU brand? (AMD: "a", Intel: "i", Other: "o")' CPU
+if [[ $CPU == "A" || $CPU == "a" ]]; then
+    echo -e "Installing AMD CPU microcode.\n"
+    sudo pacman -Syu amd-ucode
+elif [[ $CPU == "I" || $CPU == "i" ]]; then
+    echo -e "Installing Intel CPU microcode.\n"
+    sudo pacman -Syu intel-ucode
+fi
+
+clear
+
+# Ask user to specify GPU brand and install the corresponding drivers
+read -n1 -rep 'What is your GPU brand? (AMD: "a", Intel: "i", NVIDIA: "n")' GPU
+if [[ $GPU == "A" || $GPU == "a" ]]; then
+    echo -e "Installing AMD GPU drivers.\n"
+    sudo pacman -Syu vulkan-radeon xorg-xf86-video-amdgpu
+elif [[ $GPU == "I" || $GPU == "i" ]]; then
+    echo -e "Installing Intel GPU drivers.\n"
+    sudo pacman -Syu intel-media-driver libva-intel-driver intel-vulkan
+elif [[ $GPU == "N" || $GPU == "n" ]]; then
+    echo -e "Installing NVIDIA GPU drivers.\n"
+    sudo pacman -Syu nvidia nvidia-utils nvidia-settings libva-nvidia-driver-git
+fi
+
+clear
+
+# Option to install Hyprland and additional utilities
+read -n1 -rep 'Would you like to install the required packages? (y/n) ' INST
+if [[ $INST == "Y" || $INST == "y" ]]; then
+    yay -S hyprland kitty waybar \
+        swaybg swaylock-effects wofi wlogout mako thunar \
+        ttf-jetbrains-mono-nerd noto-fonts-emoji \
+        polkit-gnome python-requests starship \
+        swappy grim slurp pamixer brightnessctl gvfs \
+        bluez bluez-utils lxappearance xfce4-settings \
+        dracula-gtk-theme dracula-icons-git xdg-desktop-portal-hyprland \
+        firefox
+
+    # Enable Bluetooth services
+    sudo systemctl enable --now bluetooth.service
+fi
+
+clear
+
+# Option to copy configuration files to user's home directory
+read -n1 -rep 'Would you like to copy config files? (y/n) ' CFG
+if [[ $CFG == "Y" || $CFG == "y" ]]; then
+    cp -R hypr kitty mako waybar swaylock wofi ~/.config/
+    chmod +x ~/.config/waybar/scripts/waybar-wttr.py
+fi
+
+clear
+
+# Option to install and configure the Starship shell
+read -n1 -rep 'Would you like to install the Starship shell? (y/n) ' STAR
+if [[ $STAR == "Y" || $STAR == "y" ]]; then
+    echo 'eval "$(starship init bash)"' >> ~/.bashrc
+    cp starship.toml ~/.config/
+fi
+
+clear
+
+# Print final message
+echo -e "$CAT - Setup complete. Rebooting in...\n"
+echo -e "$CAT - 5...\n"
+sleep 1
+echo -e "$CAT - 4...\n"
+sleep 1
+echo -e "$CAT - 3...\n"
+sleep 1
+echo -e "$CAT - 2...\n"
+sleep 1
+echo -e "$CAT - 1...\n"
+sleep 1
+echo -e "REBOOTING..."
+reboot
