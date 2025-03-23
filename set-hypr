@@ -9,6 +9,8 @@ CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 INSTLOG="install.log"  # Log file for package installations
 USER="$(whoami)"
+THEME_NAME="AndormiX"
+THEME_PATH="$HOME/.config/sddm/themes/$THEME_NAME"
 
 # Check if yay is already installed
 if command -v yay >/dev/null 2>&1; then
@@ -108,6 +110,21 @@ clear
 echo -e "$CAC Applying Intel graphics fix..."
 sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& i915.enable_psr=0/' /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# Ensure the theme directory exists
+if [ ! -d "$THEME_PATH" ]; then
+    echo "Error: Theme directory not found at $THEME_PATH"
+    exit 1
+fi
+
+# Ensure /etc/sddm.conf.d exists
+sudo mkdir -p /etc/sddm.conf.d
+
+# Write the theme configuration
+echo -e "[Theme]\nCurrent=$THEME_NAME" | sudo tee /etc/sddm.conf.d/10-theme.conf > /dev/null
+
+# Restart SDDM to apply the changes
+echo "$COK Theme set to $THEME_NAME."
 sudo systemctl enable sddm
 
 clear
@@ -116,10 +133,12 @@ clear
 echo -e "$CAT - Setup complete. Rebooting in...\n"
 for i in {3..1}; do
     echo -e "$i"
+    echo -ne "\r"
     sleep 0.2
     for j in {1..4}; do
         echo -n "."
         sleep 0.2
     done
+    echo -ne "\r"
 done
 sudo reboot
