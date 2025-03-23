@@ -17,14 +17,9 @@ if command -v yay >/dev/null 2>&1; then
     echo -e "yay was located, moving on.\n"
     yay -Suy --noconfirm
 else
-    echo -e "yay was not located. Please run the following code in your terminal:\n"
-    echo "git clone https://aur.archlinux.org/yay.git && cd yay && chown -R $USER:$USER . && makepkg -si --noconfirm && cd"
-    echo -e "\nAfter running the above code, press any key to continue..."
-    read -n 1 -s  # Wait for user input before continuing
-
-    # Continue with the rest of your script after the user hits a key
-    echo -e "\nContinuing script..."
-    yay -Suy --noconfirm
+    echo -e "Hey! Before running this code pls run this code first:\n"
+    echo " cd && git clone https://aur.archlinux.org/yay.git && cd yay && chown -R $USER:$USER . && makepkg -si --noconfirm \n mkdir -p ~/.config && cd ~/hypr && cp -R hypr kitty mako waybar swaylock wofi ~/.config/ && chmod +x ~/.config/waybar/scripts/waybar-wttr.py"
+    exit
 fi
 
 # Update system
@@ -46,15 +41,6 @@ yay -S --noconfirm hyprland kitty waybar \
 
 # Enable Bluetooth services
 sudo systemctl enable --now bluetooth.service
-
-clear
-
-echo -e "Please run the following code in your terminal:\n"
-echo "mkdir -p ~/.config && cd ~/hypr && cp -R hypr kitty mako waybar swaylock wofi ~/.config/ && chmod +x ~/.config/waybar/scripts/waybar-wttr.py"
-echo -e "\nAfter running the above code, press any key to continue..."
-read -n 1 -s  # Wait for user input before continuing
-# Continue with the rest of your script after the user hits a key
-echo -e "\nContinuing script..."
 
 clear
 
