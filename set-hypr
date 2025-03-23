@@ -45,9 +45,14 @@ yay -S --noconfirm hyprland kitty waybar \
 # Enable Bluetooth services
 sudo systemctl enable --now bluetooth.service
 
-mkdir -p ~/.config
-cp -R hypr kitty mako waybar swaylock wofi ~/.config/
-chmod +x ~/.config/waybar/scripts/waybar-wttr.py
+clear
+
+echo -e "Please run the following code in your terminal:\n"
+echo "mkdir -p ~/.config && cd ~/hypr && cp -R hypr kitty mako waybar swaylock wofi ~/.config/ && chmod +x ~/.config/waybar/scripts/waybar-wttr.py"
+echo -e "\nAfter running the above code, press any key to continue..."
+read -n 1 -s  # Wait for user input before continuing
+# Continue with the rest of your script after the user hits a key
+echo -e "\nContinuing script..."
 
 clear
 
@@ -103,6 +108,7 @@ clear
 echo -e "$CAC Applying Intel graphics fix..."
 sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& i915.enable_psr=0/' /etc/default/grub
 sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo systemctl enable sddm
 
 clear
 

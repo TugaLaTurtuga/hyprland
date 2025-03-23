@@ -5,8 +5,8 @@
     "exclusive": true,
     "passthrough": false,
     "gtk-layer-shell": true,
-    "height": 30,
-    "modules-left": ["clock","wlr/workspaces","hyprland/window"],
+    "height": 40,
+    "modules-left": ["image#arch", "clock", "wlr/workspaces", "hyprland/window"],
     "modules-right": ["network", "bluetooth", "temperature","battery","backlight","pulseaudio","pulseaudio#microphone","tray"],
     "hyprland/window": {
         "format": "{}"
@@ -35,10 +35,19 @@
         "spacing": 10
     },
 
-    "clock": {
-        "format": "{: %I:%M %p   %a, %b %e}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+    "image#arch": {
+        "path": "/usr/share/icons/arch-linux-logo.png", 
+        "size": 24,
+        "on-click": "alacritty", 
+        "tooltip": "Arch Linux"
     },
+
+        "clock": {
+        "format": " %I:%M %p   %a, %b %d",
+        "tooltip-format": "<big>%Y %B</big>\n<tt><small>{calendar}</small></tt>",
+        "interval": 1
+    },
+
 
     "backlight": {
         "device": "intel_backlight",
