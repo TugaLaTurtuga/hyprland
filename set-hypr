@@ -17,55 +17,19 @@ if command -v yay >/dev/null 2>&1; then
 else
     echo -e "yay was not located. Installing yay...\n"
     
-    # Clone the yay repository
+    # Clone and install yay
     git clone https://aur.archlinux.org/yay.git ~/yay
-    
-    echo -e "$CER yay needs to be pkg. do:\n 1º: cd && chown -R $USER:$USER yay && cd yay && makepkg -si && cd\n 2º: ./hypr/set-hypr"
-    exit
+    cd ~/yay && chown -R $USER:$USER . && makepkg -si --noconfirm
+    cd
 fi
 
 # Update system
 sudo pacman -Syu --noconfirm
 
-# Install essential dependencies (skips already installed ones)
+# Install essential dependencies
 sudo pacman -S --needed --noconfirm \
     sddm sddm-kcm layer-shell-qt5 qt5-declarative \
     neofetch libva xorg-xinit xorg-server mesa pulseaudio nano flatpak
-
-clear
-
-# Clone and install the SDDM Hyprland theme
-git clone https://github.com/HyDE-Project/sddm-hyprland
-sudo make -C sddm-hyprland install
-
-clear
-
-# Ask user to specify CPU brand and install the appropriate microcode
-read -n1 -rep 'What is your CPU brand? (AMD: "a", Intel: "i", Other: "o"): ' CPU
-if [[ $CPU == "A" || $CPU == "a" ]]; then
-    echo -e "Installing AMD CPU microcode.\n"
-    sudo pacman -S --noconfirm amd-ucode
-elif [[ $CPU == "I" || $CPU == "i" ]]; then
-    echo -e "Installing Intel CPU microcode.\n"
-    sudo pacman -S --noconfirm intel-ucode
-fi
-
-clear
-
-# Ask user to specify GPU brand and install the corresponding drivers
-read -n1 -rep 'What is your GPU brand? (AMD: "a", Intel: "i", NVIDIA: "n"): ' GPU
-if [[ $GPU == "A" || $GPU == "a" ]]; then
-    echo -e "Installing AMD GPU drivers.\n"
-    sudo pacman -S --noconfirm vulkan-radeon xorg-xf86-video-amdgpu
-elif [[ $GPU == "I" || $GPU == "i" ]]; then
-    echo -e "Installing Intel GPU drivers.\n"
-    sudo pacman -S --noconfirm intel-media-driver libva-intel-driver intel-vulkan
-elif [[ $GPU == "N" || $GPU == "n" ]]; then
-    echo -e "Installing NVIDIA GPU drivers.\n"
-    sudo pacman -S --noconfirm nvidia nvidia-utils nvidia-settings libva-nvidia-driver-git
-fi
-
-clear
 
 yay -S --noconfirm hyprland kitty waybar \
     swaybg swaylock-effects wofi wlogout mako thunar \
@@ -74,16 +38,53 @@ yay -S --noconfirm hyprland kitty waybar \
     swappy grim slurp pamixer brightnessctl gvfs \
     bluez bluez-utils lxappearance xfce4-settings \
     dracula-gtk-theme dracula-icons-git xdg-desktop-portal-hyprland \
-    firefox
+    firefox obsidian visual-studio-code-bin
 
 # Enable Bluetooth services
 sudo systemctl enable --now bluetooth.service
 
-clear
-
 mkdir -p ~/.config
 cp -R hypr kitty mako waybar swaylock wofi ~/.config/
 chmod +x ~/.config/waybar/scripts/waybar-wttr.py
+
+clear
+
+# Ask user to specify CPU brand and install the appropriate microcode
+read -n1 -rep 'What is your CPU brand? (AMD: "a", Intel: "i", ARM: "r"): ' CPU
+case "$CPU" in
+    a|A) 
+        echo -e "Installing AMD CPU microcode.\n"
+        sudo pacman -S --noconfirm amd-ucode
+        ;;
+    i|I) 
+        echo -e "Installing Intel CPU microcode.\n"
+        sudo pacman -S --noconfirm intel-ucode
+        ;;
+    r|R) 
+        echo -e "Installing ARM CPU support packages.\n"
+        sudo pacman -S --noconfirm linux-aarch64 linux-aarch64-headers uboot-tools
+        ;;
+    *) 
+        echo -e "Invalid option. Skipping microcode installation.\n"
+        ;;
+esac
+
+clear
+
+# Ask user to specify GPU brand and install the corresponding drivers
+read -n1 -rep 'What is your GPU brand? (AMD: "a", Intel: "i", NVIDIA: "n", ARM: "r"): ' GPU
+case "$GPU" in
+    a|A) echo -e "Installing AMD GPU drivers.\n" && sudo pacman -S --noconfirm vulkan-radeon xorg-xf86-video-amdgpu ;;
+    i|I) echo -e "Installing Intel GPU drivers.\n" && sudo pacman -S --noconfirm intel-media-driver libva-intel-driver intel-vulkan ;;
+    n|N) echo -e "Installing NVIDIA GPU drivers.\n" && sudo pacman -S --noconfirm nvidia nvidia-utils nvidia-settings libva-nvidia-driver-git ;;
+    r|R) 
+        echo -e "Installing ARM GPU support packages.\n"
+        sudo pacman -S --noconfirm mali-opencl xf86-video-fbdev
+        ;;
+    *) 
+        echo -e "Invalid option. Skipping microcode installation.\n"
+        ;;
+esac
 
 clear
 
@@ -96,12 +97,21 @@ fi
 
 clear
 
-# Print final message
-echo -e "$CAT - Setup complete. robooting in...\n"
-echo -e "$CAT - 3...\n"
-sleep 1
-echo -e "$CAT - 2...\n"
-sleep 1
-echo -e "$CAT - 1...\n"
-sleep 1
-sudo systemctl enable --now sddm
+# Fix Intel GPU bugs (i915.enable_psr=0)
+echo -e "$CAC Applying Intel graphics fix..."
+sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& i915.enable_psr=0/' /etc/default/grub
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+clear
+
+# Print final message and reboot
+echo -e "$CAT - Setup complete. Rebooting in...\n"
+for i in {3..1}; do
+    echo -e "$i"
+    sleep 0.2
+    for j in {1..4}; do
+        echo -n "."
+        sleep 0.2
+    done
+done
+sudo reboot
