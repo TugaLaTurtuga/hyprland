@@ -15,12 +15,14 @@ if command -v yay >/dev/null 2>&1; then
     echo -e "yay was located, moving on.\n"
     yay -Suy --noconfirm
 else
-    echo -e "yay was not located. Installing yay...\n"
-    
-    # Clone and install yay
-    git clone https://aur.archlinux.org/yay.git ~/yay
-    cd ~/yay && chown -R $USER:$USER . && makepkg -si --noconfirm
-    cd
+    echo -e "yay was not located. Please run the following code in your terminal:\n"
+    echo "git clone https://aur.archlinux.org/yay.git && cd yay && chown -R $USER:$USER . && makepkg -si --noconfirm && cd"
+    echo -e "\nAfter running the above code, press any key to continue..."
+    read -n 1 -s  # Wait for user input before continuing
+
+    # Continue with the rest of your script after the user hits a key
+    echo -e "\nContinuing script..."
+    yay -Suy --noconfirm
 fi
 
 # Update system
