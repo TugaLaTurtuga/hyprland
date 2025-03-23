@@ -8,6 +8,7 @@ CAT="[\e[1;37mATTENTION\e[0m]"
 CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 INSTLOG="install.log"  # Log file for package installations
+USER="$(whoami)"
 
 # Check if yay is already installed
 if command -v yay >/dev/null 2>&1; then
@@ -19,14 +20,8 @@ else
     # Clone the yay repository
     git clone https://aur.archlinux.org/yay.git ~/yay
     
-    # Change ownership to the current user
-    sudo chown -R "$(whoami):$(whoami)" ~/yay
-    
-    # Navigate into the yay directory and build the package
-    cd ~/yay && makepkg -si --noconfirm
-    
-    # Clean up the yay directory after installation
-    cd ~ && rm -rf ~/yay
+    echo -e "$CER yay needs to be pkg. do:\n 1º: cd && chown -R $USER:$USER yay && cd yay && makepkg -si && cd\n 2º: ./hypr/set-hypr"
+    exit
 fi
 
 # Update system
