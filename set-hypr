@@ -40,7 +40,6 @@ sudo pacman -S --needed --noconfirm \
 clear
 
 # Clone and install the SDDM Hyprland theme
-sudo systemctl enable --now sddm
 git clone https://github.com/HyDE-Project/sddm-hyprland
 sudo make -C sddm-hyprland install
 
@@ -110,4 +109,4 @@ echo -e "$CAT - 2...\n"
 sleep 1
 echo -e "$CAT - 1...\n"
 sleep 1
-reboot
+sudo systemctl enable --now sddm
