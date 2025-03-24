@@ -9,18 +9,29 @@ CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 INSTLOG="install.log"  # Log file for package installations
 USER="$(whoami)"
-THEME_NAME="AndormiX"
-THEME_PATH="$HOME/.config/sddm/themes/$THEME_NAME"
+THEME_NAME="AndromiX"
+THEME_PATH="~/.config/sddm/themes/$THEME_NAME"
 
 # Check if yay is already installed
 if command -v yay >/dev/null 2>&1; then
     echo -e "yay was located, moving on.\n"
     yay -Suy --noconfirm
 else
-    echo -e "Hey! Before running this code pls run this code first:\n"
-    echo " cd && git clone https://aur.archlinux.org/yay.git && cd yay && chown -R $USER:$USER . && makepkg -si --noconfirm \n mkdir -p ~/.config && cd ~/hypr && cp -R hypr kitty mako waybar swaylock wofi ~/.config/ && chmod +x ~/.config/waybar/scripts/waybar-wttr.py"
-    exit
+    # no package found so installing
+    echo -en "$CNT - Now installing $1 ."
+    yay -S --noconfirm $1 &>> $INSTLOG &
+    show_progress $!
+    # test to make sure package installed
+    if yay -Q $1 &>> /dev/null ; then
+        echo -e "\e[1A\e[K$COK - $1 was installed."
+    else
+        # if this is hit then a package is missing, exit to review log
+        echo -e "\e[1A\e[K$CER - $1 install had failed, please check the install.log"
+        exit
 fi
+
+mkdir -p ~/.config
+cp -R ~/hypr/* ~/.config/
 
 # Update system
 sudo pacman -Syu --noconfirm
@@ -105,6 +116,9 @@ if [ ! -d "$THEME_PATH" ]; then
 else
     echo -e "$CAC Putting theme: $THEME_NAME in sddm"
 
+    sudo mkdir -p /usr/share/sddm/themes/
+    sudo cp -R "$THEME_PATH" "/usr/share/sddm/themes/$THEME_NAME"
+
     # Ensure /etc/sddm.conf.d exists
     sudo mkdir -p /etc/sddm.conf.d
 
@@ -113,8 +127,11 @@ else
 
     # Restart SDDM to apply the changes
     echo "$COK Theme set to $THEME_NAME."
-    sudo systemctl enable sddm
+    sudo systemctl restart sddm
 fi
+
+
+sudo systemctl enable sddm
 
 clear
 

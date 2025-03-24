@@ -7,7 +7,7 @@
     "gtk-layer-shell": true,
     "height": 40,
     "modules-left": ["image#arch", "custom/weather", "wlr/workspaces"],
-    "modules-right": ["network", "bluetooth", "temperature","battery","backlight","pulseaudio", "custom/power_btn"],
+    "modules-right": ["network", "bluetooth", "temperature","battery","backlight","pulseaudio"],
     "hyprland/window": {
         "format": "{}"
     },
@@ -38,7 +38,7 @@
     "image#arch": {
         "path": "~/.config/waybar/arch-logo.png", 
         "size": 24,
-        "on-click": "alacritty", 
+        "on-click": "exec neofetch", 
         "tooltip": "Open terminal: SUPER + RETURN\nOpen wofi: SUPER + SPACE\nExit app: SUPER + Q"
     },
 
@@ -49,12 +49,6 @@
         "interval" : 30,
         "exec" : "~/.config/waybar/scripts/waybar-wttr.py",
         "return-type" : "json"
-    },
-    
-    "custom/power_btn": {
-        "format": "",
-        "on-click": "sh -c '(sleep 0.5s; wlogout --protocol layer-shell)' & disown",
-        "tooltip": false
     },
 
     "clock": {
@@ -103,16 +97,6 @@
             "car": "",
             "default": ["", "", ""]
         }
-    },
-
-    "pulseaudio#microphone": {
-        "format": "{format_source}",
-        "format-source": " {volume}%",
-        "format-source-muted": " Muted",
-        "on-click": "pamixer --default-source -t",
-        "on-scroll-up": "pamixer --default-source -i 5",
-        "on-scroll-down": "pamixer --default-source -d 5",
-        "scroll-step": 5
     },
     
     "temperature": {
