@@ -1,5 +1,5 @@
-# hyprland
-collection of dot config files for hyprland with a simple install script for a fresh Arch linux with yay
+# hypr
+collection of dot config files for hyprland with a simple install script for a fresh install of Arch linux + yay
 
 ## How to use:
-    - run the 'run' command (./run)
+    - ./hpyr/set-hypr

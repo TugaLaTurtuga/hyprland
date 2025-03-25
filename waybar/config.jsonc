@@ -6,7 +6,7 @@
     "passthrough": false,
     "gtk-layer-shell": true,
     "height": 40,
-    "modules-left": ["clock", "custom/weather", "wlr/workspaces"],
+    "modules-left": ["image#arch", "clock", "custom/weather", "wlr/workspaces"],
     "modules-right": ["network", "bluetooth", "temperature","battery","backlight","pulseaudio"],
     "hyprland/window": {
         "format": "{}"
