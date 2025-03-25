@@ -13,7 +13,8 @@ window#waybar {
 }
 
 tooltip {
-    background: #1e1e2e;
+    background: rgb(30, 30, 46, 0.8);
+    backdrop-filter: blur(4px);
     border-radius: 10px;
     border-width: 2px;
     border-style: solid;
@@ -109,7 +110,6 @@ image#arch {
     color: #fab387;
     border-radius: 0px 10px 10px 0px;
     margin-left: 40px;
-    border-right: 0px;
 }
 
 #network {
@@ -150,7 +150,5 @@ image#arch {
 
 #custom-weather {
     border-radius: 10px;
-    border-right: 0px;
-    margin-right: 10px;
-    margin-left: 0px;
+    margin-left: 10px;
 }
