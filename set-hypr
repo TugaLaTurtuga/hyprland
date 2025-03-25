@@ -11,6 +11,9 @@ INSTLOG="install.log"  # Log file for package installations
 USER="$(whoami)"
 THEME_NAME="AndromiX"
 THEME_PATH="~/.config/sddm/themes/$THEME_NAME"
+set -e  # Exit on error
+sudo pacman -Syu --needed --noconfirm base-devel
+clear
 
 # Check if yay is already installed
 if command -v yay >/dev/null 2>&1; then
@@ -19,16 +22,31 @@ if command -v yay >/dev/null 2>&1; then
 else
     # no package found so installing
     echo -en "$CNT - Now installing $1 ."
-    yay -S --noconfirm $1 &>> $INSTLOG &
-    show_progress $!
-    # test to make sure package installed
-    if yay -Q $1 &>> /dev/null ; then
-        echo -e "\e[1A\e[K$COK - $1 was installed."
+    echo "Updating system and installing prerequisites..."
+
+    echo "Cloning yay repository..."
+    git clone https://aur.archlinux.org/yay.git /tmp/yay
+    cd /tmp/yay
+
+    echo "Building and installing yay..."
+    makepkg -si --noconfirm
+
+    echo "Checking yay installation..."
+    if command -v yay &>/dev/null; then
+        echo "yay installed successfully!"
     else
-        # if this is hit then a package is missing, exit to review log
-        echo -e "\e[1A\e[K$CER - $1 install had failed, please check the install.log"
-        exit
+        echo "Installation failed!" >&2
+        exit 1
     fi
+
+    echo "Creating a package of yay..."
+    makepkg -cf
+
+    echo "Moving package to ~/yay..."
+    mkdir -p ~/yay
+    mv *.pkg.tar.zst ~/yay/
+
+    echo "Done! The packaged yay can be found in '~/yay'."
 fi
 
 mkdir -p ~/.config

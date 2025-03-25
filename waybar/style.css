@@ -48,10 +48,9 @@ tooltip {
     border-radius: 10px;
 }
 
-#custom-power_profile,
 #custom-weather,
 #window,
-#clock,
+#custom-clock,
 #battery,
 #pulseaudio,
 #network,
@@ -93,22 +92,16 @@ tooltip {
     padding-left: 5px;
 }
 
-#custom-power_profile {
-    color: #a6e3a1;
-    border-left: 0px;
-    border-right: 0px;
-}
-
 #window {
     border-radius: 10px;
     margin-left: 60px;
     margin-right: 60px;
 }
 
-#clock {
+#custom-clock {
     color: #fab387;
     border-radius: 10px 0px 0px 10px;
-    margin-left: 10px;
+    margin-left: 40px;
     border-right: 0px;
 }
 
@@ -129,6 +122,8 @@ tooltip {
     color: #89b4fa;
     border-left: 0px;
     border-right: 0px;
+    border-radius: 0px 10px 10px 0px;
+    margin-right: 40px;
 }
 
 #pulseaudio.microphone {
