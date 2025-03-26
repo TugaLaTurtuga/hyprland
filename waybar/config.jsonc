@@ -5,9 +5,8 @@
     "exclusive": true,
     "passthrough": false,
     "gtk-layer-shell": true,
-    "width": 1000,
     "height": 40,
-    "modules-left": ["image#arch", "custom/clock", "custom/weather", "wlr/workspaces"],
+    "modules-left": ["custom/clock", "custom/weather", "wlr/workspaces"],
     "modules-right": ["network", "bluetooth", "temperature","battery","backlight","pulseaudio"],
     "hyprland/window": {
         "format": "{}"
@@ -53,7 +52,7 @@
     "custom/clock": {
         "tooltip" : true,
         "format" : "{}",
-        "interval" : 30,
+        "interval" : 10,
         "exec" : "~/.config/waybar/scripts/waybar-time.py",
         "return-type" : "json"
     },

@@ -13,8 +13,7 @@ window#waybar {
 }
 
 tooltip {
-    background: rgb(30, 30, 46, 0.8);
-    backdrop-filter: blur(4px);
+    background: rgba(30, 30, 46, 0.8);
     border-radius: 10px;
     border-width: 2px;
     border-style: solid;
@@ -51,7 +50,6 @@ tooltip {
 
 #custom-weather,
 #window,
-image#arch,
 #custom-clock,
 #battery,
 #pulseaudio,
@@ -100,16 +98,10 @@ image#arch,
     margin-right: 60px;
 }
 
-image#arch {
-    border-radius: 10px 0px 0px 10px;
-    margin-left: 40px;
-    border-left: 0px;
-}
-
 #custom-clock {
     color: #fab387;
-    border-radius: 0px 10px 10px 0px;
-    margin-left: 40px;
+    border-radius: 10px;
+    margin-left: 60px;
 }
 
 #network {
@@ -130,7 +122,7 @@ image#arch {
     border-left: 0px;
     border-right: 0px;
     border-radius: 0px 10px 10px 0px;
-    margin-right: 40px;
+    margin-right: 60px;
 }
 
 #pulseaudio.microphone {
