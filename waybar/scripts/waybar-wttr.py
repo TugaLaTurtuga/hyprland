@@ -45,7 +45,7 @@ def format_chances(hour):
 current_weather = weather['current_condition'][0]
 weather_icon = WEATHER_CODES.get(current_weather['weatherCode'], "🌥️")  # Default if code is missing
 data = {
-    'text': f"{weather_icon}{format_temp(current_weather)}",
+    'text': f"{weather_icon} {format_temp(current_weather)}",
     'tooltip': f"<b>{weather['nearest_area'][0]['country'][0]['value']}, {weather['nearest_area'][0]['areaName'][0]['value']}</b>\n"
                f"{current_weather['weatherDesc'][0]['value']} {current_weather['temp_C']}°C\n"
                f"Wind: {current_weather['windspeedKmph']} Km/h\n"

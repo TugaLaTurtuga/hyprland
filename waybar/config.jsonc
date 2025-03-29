@@ -46,7 +46,8 @@
         "format" : "{}",
         "interval" : 3600,
         "exec" : "~/.config/waybar/scripts/waybar-wttr.py",
-        "return-type" : "json"
+        "return-type" : "json",
+        "on-click": "xdg-open 'https://wttr.in'"
     },
 
     "custom/clock": {
