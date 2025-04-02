@@ -49,6 +49,7 @@ else
     echo "Done! The packaged yay can be found in '~/yay'."
 fi
 
+clear
 mkdir -p ~/.config
 cp -R ~/hypr/* ~/.config/
 
@@ -101,7 +102,10 @@ read -n1 -rep 'What is your GPU brand? (AMD: "a", Intel: "i", NVIDIA: "n", ARM: 
 case "$GPU" in
     a|A) echo -e "Installing AMD GPU drivers.\n" && sudo pacman -S --noconfirm vulkan-radeon xorg-xf86-video-amdgpu ;;
     i|I) echo -e "Installing Intel GPU drivers.\n" && sudo pacman -S --noconfirm intel-media-driver libva-intel-driver intel-vulkan ;;
-    n|N) echo -e "Installing NVIDIA GPU drivers.\n" && sudo pacman -S --noconfirm nvidia nvidia-utils nvidia-settings libva-nvidia-driver-git ;;
+    n|N) 
+        echo -e "Installing NVIDIA GPU drivers.\n" && sudo pacman -S --noconfirm nvidia nvidia-utils nvidia-settings libva-nvidia-driver-git
+        flatpak run io.github.hmlendea.geforcenow-electron
+        ;;
     r|R) 
         echo -e "Installing ARM GPU support packages.\n"
         sudo pacman -S --noconfirm mali-opencl xf86-video-fbdev
@@ -114,11 +118,11 @@ esac
 clear
 
 # Install and configure the Starship shell (optional)
-read -n1 -rep 'Would you like to install the Starship shell? (y/n) ' STAR
-if [[ $STAR == "Y" || $STAR == "y" ]]; then
-    echo 'eval "$(starship init bash)"' >> ~/.bashrc
-    cp starship.toml ~/.config/
-fi
+#read -n1 -rep 'Would you like to install the Starship shell? (y/n) ' STAR
+#if [[ $STAR == "Y" || $STAR == "y" ]]; then
+#    echo 'eval "$(starship init bash)"' >> ~/.bashrc
+#    cp starship.toml ~/.config/
+#fi
 
 clear
 
@@ -146,7 +150,6 @@ else
 
     # Restart SDDM to apply the changes
     echo "$COK Theme set to $THEME_NAME."
-    sudo systemctl restart sddm
 fi
 
 
