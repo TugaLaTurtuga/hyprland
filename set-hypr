@@ -9,8 +9,6 @@ CWR="[\e[1;35mWARNING\e[0m]"
 CAC="[\e[1;33mACTION\e[0m]"
 INSTLOG="install.log"  # Log file for package installations
 USER="$(whoami)"
-THEME_NAME="AndromiX"
-THEME_PATH="~/.config/sddm/themes/$THEME_NAME"
 set -e  # Exit on error
 sudo pacman -Syu --needed --noconfirm base-devel
 clear
@@ -58,22 +56,26 @@ sudo pacman -Syu --noconfirm
 
 # Install essential dependencies
 sudo pacman -S --needed --noconfirm \
-    sddm sddm-kcm layer-shell-qt5 qt5-declarative \
-    neofetch libva xorg-xinit xorg-server mesa pulseaudio nano flatpak
+    ly layer-shell-qt5 qt5-declarative \
+    libva xorg-xinit xorg-server mesa pulseaudio nano flatpak \
 
 yay -S --noconfirm hyprland kitty waybar \
-    swaybg swaylock-effects wofi wlogout mako thunar \
+    swaylock-effects wofi wlogout mako thunar \
     ttf-jetbrains-mono-nerd noto-fonts-emoji \
     polkit-gnome python-requests starship \
     swappy grim slurp pamixer brightnessctl gvfs \
     bluez bluez-utils lxappearance xfce4-settings \
-    dracula-gtk-theme dracula-icons-git xdg-desktop-portal-hyprland \
-    zen obsidian visual-studio-code-bin
+    nwg-look qogir-icon-theme materia-gtk-theme illogical-impulse-bibata-modern-classic-bin xdg-desktop-portal-hyprland \
+    zen obsidian \
+    reflector rsync python-pywal16 swww swaync myfetch neovim python-pywalfox hypridle hyprpicker hyprshot hyprlock pyprland fd cava brightnessctl clock-rs-git nwg-look qogir-icon-theme materia-gtk-theme illogical-impulse-bibata-modern-classic-bin thunar gvfs eza bottom htop libreoffice-fresh ncspot blueman bluez pipewire pipewire-pulse pipewire-alsa pipewire-jack pavucontrol pulsemixer gnome-network-displays gst-plugins-bad
 
 # Enable Bluetooth services
 sudo systemctl enable --now bluetooth.service
 
 clear
+
+echo "Setting wallpaper"
+wal -i ~/Dotfiles/wallpapers/pywallpaper.jpg -n
 
 # Ask user to specify CPU brand and install the appropriate microcode
 read -n1 -rep 'What is your CPU brand? (AMD: "a", Intel: "i", ARM: "r"): ' CPU
@@ -118,40 +120,13 @@ esac
 clear
 
 # Install and configure the Starship shell (optional)
-#read -n1 -rep 'Would you like to install the Starship shell? (y/n) ' STAR
-#if [[ $STAR == "Y" || $STAR == "y" ]]; then
-#    echo 'eval "$(starship init bash)"' >> ~/.bashrc
-#    cp starship.toml ~/.config/
-#fi
-
-clear
-
-# Fix Intel GPU bugs (i915.enable_psr=0)
-echo -e "$CAC Applying Intel graphics fix..."
-sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& i915.enable_psr=0/' /etc/default/grub
-sudo grub-mkconfig -o /boot/grub/grub.cfg
-
-clear
-
-# Ensure the theme directory exists
-if [ ! -d "$THEME_PATH" ]; then
-    echo "$CER Theme directory not found at $THEME_PATH"
-else
-    echo -e "$CAC Putting theme: $THEME_NAME in sddm"
-
-    sudo mkdir -p /usr/share/sddm/themes/
-    sudo cp -R "$THEME_PATH" "/usr/share/sddm/themes/$THEME_NAME"
-
-    # Ensure /etc/sddm.conf.d exists
-    sudo mkdir -p /etc/sddm.conf.d
-
-    # Write the theme configuration
-    echo -e "[Theme]\nCurrent=$THEME_NAME" | sudo tee /etc/sddm.conf.d/10-theme.conf > /dev/null
-
-    # Restart SDDM to apply the changes
-    echo "$COK Theme set to $THEME_NAME."
+read -n1 -rep 'Would you like to install the Starship shell? (y/n) ' STAR
+if [[ $STAR == "Y" || $STAR == "y" ]]; then
+    echo 'eval "$(starship init bash)"' >> ~/.bashrc
+    cp starship.toml ~/.config/
 fi
 
+clear
 
 sudo systemctl enable sddm
 
