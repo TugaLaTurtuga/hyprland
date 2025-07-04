@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# I donno were this file came and its impact, didn't delete it just in case it is important
 sleep 1
 killall xdg-desktop-portal-hyprland
 killall xdg-desktop-portal-wlr
